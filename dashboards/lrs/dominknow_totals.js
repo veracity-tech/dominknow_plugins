@@ -65,6 +65,13 @@ class CustomDash extends Dashboard {
             },
 
         },
+        {
+            handler: 'dominknow_paths',
+            params: {
+
+            },
+
+        },
 
         ];
     }
