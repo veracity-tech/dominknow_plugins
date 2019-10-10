@@ -20,7 +20,7 @@ module.exports = class LearnersWithComp extends AnalyticProcessor {
     constructor(params, db, lrs) {
         super(params, db, lrs);
 
-        this.title = this.param('title');
+        this.title = "Users completing :" + this.param('title');
         this.pipeline = [
             ...CommonStages(this, {
                 range: false,
@@ -29,7 +29,7 @@ module.exports = class LearnersWithComp extends AnalyticProcessor {
             {
                 $match: {
 
-                    'statement.verb.id': 'http://www.dominknow.com/xapi/verbs/objective_complete',
+                    'statement.verb.id': 'http://activitystrea.ms/schema/1.0/complete',
                     'statement.object.id': this.param('comp'),
                 },
             },
@@ -49,11 +49,12 @@ module.exports = class LearnersWithComp extends AnalyticProcessor {
                 },
             },
         ];
+        this.map = MapToActorNameAsync("title","subtext")
     }
     exec(data) {
         data.unshift({
             icon: 'fa-check',
-            title: this.param('title'),
+            title:  this.param('title'),
             subtext: this.param('comp'),
         });
         return data;

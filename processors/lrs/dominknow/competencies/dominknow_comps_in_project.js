@@ -29,7 +29,7 @@ module.exports = class CompsInProject extends AnalyticProcessor {
             {
                 $match: {
                     'statement.context.contextActivities.parent.id': this.param('projectId'),
-                    'statement.verb.id': 'http://www.dominknow.com/xapi/verbs/objective_complete',
+                    'statement.verb.id': 'http://activitystrea.ms/schema/1.0/complete',
                     'statement.object.definition.type': 'http://adlnet.gov/expapi/activities/objective',
                 },
             },
