@@ -67,6 +67,13 @@ class CustomDash extends Dashboard {
                     title: allComps[i].title,
                 },
             });
+            graphs.push({
+                handler: 'dominknow_questions_for_comp',
+                params: {
+                    comp: allComps[i]._id,
+                    title: allComps[i].title,
+                },  
+            });
         }
         return graphs;
     }
@@ -93,6 +100,7 @@ class CustomDash extends Dashboard {
             },
             allowedProcessors: [
                 'dominknow_comps_in_project',
+                'dominknow_questions_for_comp',
                 'dominknow_learners_with_comp',
                 'dominknow_search_projects',
 

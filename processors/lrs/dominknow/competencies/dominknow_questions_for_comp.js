@@ -28,9 +28,8 @@ module.exports = class CompsInProject extends AnalyticProcessor {
             }),
             {
                 $match: {
-                    'statement.context.contextActivities.parent.id': this.param('projectId'),
-                    'statement.verb.id': 'http://activitystrea.ms/schema/1.0/complete',
-                    'statement.object.definition.type': 'http://adlnet.gov/expapi/activities/objective',
+                    'statement.context.contextActivities.parent.id': this.param('comp'),
+                    'statement.object.definition.type': "http://adlnet.gov/expapi/activities/cmi.interaction",
                 },
             },
             {
@@ -39,25 +38,34 @@ module.exports = class CompsInProject extends AnalyticProcessor {
                     name: {
                         $last: '$statement.object.definition.name.en-US',
                     },
-                    description: {
-                        $last: '$statement.object.definition.description.en-US',
+                    type: {
+                        $last: '$statement.object.definition.interactionType',
                     },
                 },
             },
             {
                 $project: {
-                    icon: 'fa-check',
+                    icon: 'fa-question',
                     title: '$name',
-                    subtext: '$description',
+                    subtext: '$type',
                 },
             },
         ];
     }
     exec(data) {
+        for(let i in data)
+        {
+            data[i].subtext += " - " + data[i]._id;
+        }
+        data.unshift({
+            icon: 'fa-check',
+            title: this.param('title'),
+            subtext: "Questions within " + this.param('comp'),
+        })
         return data;
     }
     static getConfiguration() {
-        const conf = new ProcessorConfiguration('Learning Objects In Project', ProcessorConfiguration.widgetType.iconList, ProcessorConfiguration.widgetSize.small);
+        const conf = new ProcessorConfiguration('Questions for Learning Object', ProcessorConfiguration.widgetType.iconList, ProcessorConfiguration.widgetSize.small);
         conf.addParameter('range', new TimeRange('Time Range', ''), true);
         conf.addParameter('question', new ActivityPicker('Activity', 'Choose the activity to plot'), true);
         return conf;
